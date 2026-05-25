@@ -283,7 +283,7 @@ S↔D: -0.5059   S↔E: -0.5117   D↔E: -0.4822
 ## Разработка
 
 ```bash
-git clone https://github.com/Semiotronika/HEXG-MCP
+git clone https://github.com/Arrest0ron/HEXG.git
 cd HEXG-MCP
 pip install -e .
 python -m compileall -q HEXG_mcp pytest_smoke.py scripts
@@ -291,17 +291,5 @@ python -m pytest -q
 python test_server.py
 ```
 
----
-
-## Ссылки
-
-- 🌐 [semiotronika.ru](https://semiotronika.ru)
-- 📦 [PyPI](https://pypi.org/project/HEXG-mcp/)
-- 🗂️ [Glama Registry](https://glama.ai/mcp/servers/Semiotronika/HEXG-MCP)
-- 🐙 [GitHub](https://github.com/Semiotronika/HEXG-MCP)
-
-MIT License © 2026 Semiotronika
-
-*Косинусы считаются. Синтаксис меняется. Семантика остаётся.*
 
 <!-- mcp-name: io.github.Semiotronika/HEXG-MCP -->
