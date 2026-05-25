@@ -1,4 +1,4 @@
-# NOUZ — Семантический MCP-сервер для вашей базы знаний
+# HEXG — Семантический MCP-сервер для вашей базы знаний
 
 > *Структура появляется из содержания.*
 
@@ -7,18 +7,18 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
 [![MCP](https://img.shields.io/badge/protocol-MCP_stdio-lightgrey.svg)](https://modelcontextprotocol.io)
-[![PyPI](https://img.shields.io/badge/pypi-nouz--mcp-orange.svg)](https://pypi.org/project/nouz-mcp/)
+[![PyPI](https://img.shields.io/badge/pypi-HEXG--mcp-orange.svg)](https://pypi.org/project/HEXG-mcp/)
 
 🇬🇧 [English version](README_EN.md)
 
 ---
 
-## Зачем нужен Nouz
+## Зачем нужен HEXG
 
-NOUZ выступает прослойкой между вашей базой заметок и AI-агентом. Он помогает превратить разрозненные Markdown-файлы в граф, с которым можно работать через MCP:
+HEXG выступает прослойкой между вашей базой заметок и AI-агентом. Он помогает превратить разрозненные Markdown-файлы в граф, с которым можно работать через MCP:
 
 1. **Автоматическая классификация (Семантика)**
-   Вы задаете "Ядра" — базовые домены вашей базы (например: Systems Analysis, Data & Science, Engineering). Когда вы добавляете новую заметку, NOUZ читает ее текст, сравнивает векторы и предлагает доменный знак или комбинацию доменов.
+   Вы задаете "Ядра" — базовые домены вашей базы (например: Systems Analysis, Data & Science, Engineering). Когда вы добавляете новую заметку, HEXG читает ее текст, сравнивает векторы и предлагает доменный знак или комбинацию доменов.
 
 2. **Поиск связей между заметками**
    Сервер строит направленный граф (DAG) и предлагает связи, которые можно проверить перед записью:
@@ -26,9 +26,9 @@ NOUZ выступает прослойкой между вашей базой з
    - Явные `tag`-связи можно хранить вручную в `parents_meta`; `suggest_metadata` также предлагает read-only `tag_bridges` по пересечению явных канонических YAML-тегов.
 
 3. **Отслеживание эволюции базы (Дрифт)**
-   NOUZ агрегирует данные снизу вверх. Если модуль начинался как один домен, а новые заметки постепенно уводят его в другой, сервер покажет расхождение (`core_drift`).
+   HEXG агрегирует данные снизу вверх. Если модуль начинался как один домен, а новые заметки постепенно уводят его в другой, сервер покажет расхождение (`core_drift`).
 
-В зависимости от ваших задач NOUZ работает в трех режимах: от простого графа (**LUCA**) до строгой 5-уровневой иерархии (**SLOI**).
+В зависимости от ваших задач HEXG работает в трех режимах: от простого графа (**LUCA**) до строгой 5-уровневой иерархии (**SLOI**).
 
 ---
 
@@ -46,8 +46,8 @@ NOUZ выступает прослойкой между вашей базой з
 ## Быстрый старт
 
 ```bash
-pip install nouz-mcp
-OBSIDIAN_ROOT=/path/to/vault nouz-mcp
+pip install HEXG-mcp
+OBSIDIAN_ROOT=/path/to/vault HEXG-mcp
 ```
 
 Без `config.yaml` сервер стартует в режиме **LUCA** — граф без семантики, работает сразу.
@@ -67,8 +67,8 @@ Copy-Item config.template.yaml config.yaml
 Или из исходников:
 
 ```bash
-git clone https://github.com/Semiotronika/NOUZ-MCP
-cd NOUZ-MCP
+git clone https://github.com/Semiotronika/HEXG-MCP
+cd HEXG-MCP
 pip install -r requirements.txt
 cp config.template.yaml config.yaml
 OBSIDIAN_ROOT=./vault python server.py
@@ -79,11 +79,11 @@ OBSIDIAN_ROOT=./vault python server.py
 ```json
 {
   "mcpServers": {
-    "nouz": {
-      "command": "nouz-mcp",
+    "HEXG": {
+      "command": "HEXG-mcp",
       "env": {
         "OBSIDIAN_ROOT": "/path/to/vault",
-        "NOUZ_CONFIG": "/absolute/path/to/config.yaml",
+        "HEXG_CONFIG": "/absolute/path/to/config.yaml",
         "EMBED_API_URL": "http://127.0.0.1:1234/v1"
       }
     }
@@ -116,13 +116,13 @@ OBSIDIAN_ROOT=./vault python server.py
 | `add_entity` | Создать сущность в один шаг (авто sign/parents, теги только явно) |
 | `process_orphans` | Автозаполнение файлов без разметки |
 
-Установите `NOUZ_READ_ONLY=true`, чтобы скрыть и заблокировать инструменты,
+Установите `HEXG_READ_ONLY=true`, чтобы скрыть и заблокировать инструменты,
 которые меняют базу (`write_file`, `update_metadata`, `index_all`, пересчёты,
 обработку сирот и создание сущностей). Read-only инструменты вроде `read_file`,
 `suggest_metadata`, `embed`, `chunk_text`, `chunk_file` и `search_chunks` останутся
-доступны. В режиме `NOUZ_READ_ONLY=true` read-only инструменты по умолчанию не
+доступны. В режиме `HEXG_READ_ONLY=true` read-only инструменты по умолчанию не
 обновляют SQLite-кэш, а startup пропускает DB init/index/calibration; если это
-нужно, включите `NOUZ_CACHE_WRITE=true`.
+нужно, включите `HEXG_CACHE_WRITE=true`.
 
 `chunk_text` и `chunk_file` возвращают `chunker_version`, стабильный `id`,
 координаты фактического текста чанка (`start_char`/`end_char`), координаты тела
@@ -136,18 +136,18 @@ OBSIDIAN_ROOT=./vault python server.py
 а `score_mode=raw` сохраняет legacy cosine-поведение.
 
 `semantic_bridges` остаются связями между заметками, но при наличии сохранённых
-чанков для обеих сторон NOUZ требует подтверждающую пару фрагментов. Такой bridge
+чанков для обеих сторон HEXG требует подтверждающую пару фрагментов. Такой bridge
 возвращает `note_score`, `chunk_score`, `chunk_score_raw`,
 `chunk_score_centered`, `chunk_score_mode` и `evidence` со span/snippet для
 обеих заметок. Если чанки ещё не проиндексированы, мост сохраняет старый
 note-level fallback с `evidence_status: chunk_embeddings_unavailable`.
 
 `parents_meta.link_type` поддерживает ручные связи `hierarchy`, `semantic`,
-`temporary`, `tag`, `analogy` и `error`. NOUZ не генерирует аналогии
+`temporary`, `tag`, `analogy` и `error`. HEXG не генерирует аналогии
 автоматически. `tag_bridges` в `suggest_metadata` являются предложениями по
 явным YAML-тегам и сами не записываются в файл.
 
-YAML-теги считаются явной метаданной: NOUZ нормализует их к каноническому
+YAML-теги считаются явной метаданной: HEXG нормализует их к каноническому
 slug-виду (`agent-context`, опционально `area/topic`) и отбрасывает очевидные
 не-теги: hex-цвета, URL, числовые токены, пустые значения и `none`/`null`.
 `suggest_metadata` возвращает `tag_quality`, чтобы агент видел, какие теги
@@ -157,7 +157,7 @@ slug-виду (`agent-context`, опционально `area/topic`) и отбр
 явных inline `#tag` в тексте. Кандидаты не записываются в YAML автоматически;
 если их принять через `update_metadata`, обычные `tag_bridges` начнут работать
 по этим тегам. До записи возможные связи возвращаются отдельно как
-`candidate_tag_bridges`. Для каждого кандидата NOUZ временно режет текущий
+`candidate_tag_bridges`. Для каждого кандидата HEXG временно режет текущий
 текст на чанки и возвращает `evidence` с `chunk_id`, заголовком, координатами и
 коротким фрагментом. Это не требует заранее заполненной таблицы
 `chunk_embeddings`.
@@ -235,7 +235,7 @@ artifact_signs:
 Проверьте попарные косинусы: mean-centered между разными доменами должен быть
 заметно ниже сырого. Если все пары примерно одинаковые — усильте различия в текстах.
 Отдельную проверку эталонов можно запустить из установленного пакета:
-`nouz-calc-etalons --config config.yaml`.
+`HEXG-calc-etalons --config config.yaml`.
 
 `etalons` — это смысловые домены, которые сравниваются через эмбеддинги.
 `artifact_signs` — тип материала для артефактов L5: заметка, концепт, ссылка, лог, обновление, гипотеза или спецификация. Это эвристическая метка, а не отдельный эталон для эмбеддингов. В публичной схеме домены обычно обозначаются заглавными буквами (`S/D/E`), а типы материала — строчными (`n/c/r/l/u/h/s`); их можно заменить в конфиге, если знаки короткие и не конфликтуют с доменами. При необходимости для любого типа можно добавить `keywords`: тогда сервер будет использовать ваши слова для эвристики вместо встроенного RU/EN набора.
@@ -257,9 +257,9 @@ S↔D: -0.5059   S↔E: -0.5117   D↔E: -0.4822
 | Переменная | По умолчанию | Описание |
 | --- | --- | --- |
 | `OBSIDIAN_ROOT` | `./obsidian` | Путь к хранилищу |
-| `NOUZ_CONFIG` | *(пусто)* | Абсолютный путь к `config.yaml`; если не задан, сервер ищет конфиг в текущей директории |
-| `NOUZ_DATABASE_NAME` | `obsidian_kb.db` | Имя файла SQLite-кэша внутри `OBSIDIAN_ROOT`; удобно для изолированных проверок, например `obsidian_kb.public.db` |
-| `NOUZ_DATABASE_PATH` | *(пусто)* | Полный путь к SQLite-кэшу; имеет приоритет над `NOUZ_DATABASE_NAME` |
+| `HEXG_CONFIG` | *(пусто)* | Абсолютный путь к `config.yaml`; если не задан, сервер ищет конфиг в текущей директории |
+| `HEXG_DATABASE_NAME` | `obsidian_kb.db` | Имя файла SQLite-кэша внутри `OBSIDIAN_ROOT`; удобно для изолированных проверок, например `obsidian_kb.public.db` |
+| `HEXG_DATABASE_PATH` | *(пусто)* | Полный путь к SQLite-кэшу; имеет приоритет над `HEXG_DATABASE_NAME` |
 | `EMBED_PROVIDER` | `openai` | `openai`, `lmstudio`, `ollama` |
 | `EMBED_API_URL` | `http://127.0.0.1:1234/v1` | Эндпоинт для эмбеддингов |
 | `EMBED_API_KEY` | *(пусто)* | API-ключ, если нужен |
@@ -273,7 +273,7 @@ S↔D: -0.5059   S↔E: -0.5117   D↔E: -0.4822
 |-----------|-----------|
 | Эмбеддинги (LM Studio / Ollama) | ✅ Да |
 | Ваши заметки | ✅ Да |
-| Сервер NOUZ | ✅ Да |
+| Сервер HEXG | ✅ Да |
 | Контекст AI-агента (Claude, ChatGPT) | ❌ Уходит в облако |
 
 Всё критичное остаётся на вашей машине.
@@ -283,10 +283,10 @@ S↔D: -0.5059   S↔E: -0.5117   D↔E: -0.4822
 ## Разработка
 
 ```bash
-git clone https://github.com/Semiotronika/NOUZ-MCP
-cd NOUZ-MCP
+git clone https://github.com/Semiotronika/HEXG-MCP
+cd HEXG-MCP
 pip install -e .
-python -m compileall -q nouz_mcp pytest_smoke.py scripts
+python -m compileall -q HEXG_mcp pytest_smoke.py scripts
 python -m pytest -q
 python test_server.py
 ```
@@ -296,12 +296,12 @@ python test_server.py
 ## Ссылки
 
 - 🌐 [semiotronika.ru](https://semiotronika.ru)
-- 📦 [PyPI](https://pypi.org/project/nouz-mcp/)
-- 🗂️ [Glama Registry](https://glama.ai/mcp/servers/Semiotronika/NOUZ-MCP)
-- 🐙 [GitHub](https://github.com/Semiotronika/NOUZ-MCP)
+- 📦 [PyPI](https://pypi.org/project/HEXG-mcp/)
+- 🗂️ [Glama Registry](https://glama.ai/mcp/servers/Semiotronika/HEXG-MCP)
+- 🐙 [GitHub](https://github.com/Semiotronika/HEXG-MCP)
 
 MIT License © 2026 Semiotronika
 
 *Косинусы считаются. Синтаксис меняется. Семантика остаётся.*
 
-<!-- mcp-name: io.github.Semiotronika/NOUZ-MCP -->
+<!-- mcp-name: io.github.Semiotronika/HEXG-MCP -->
