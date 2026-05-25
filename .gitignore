@@ -1,0 +1,38 @@
+# Distribution / Build
+build/
+dist/
+dist-*/
+.build-tmp/
+*.egg-info/
+__pycache__/
+*/__pycache__/
+.pytest_cache/
+pytest-cache-files-*/
+.test-tmp/
+.test_tmp/
+_release_tmp*/
+_manual_tmp/
+_py_manual_dir/
+
+# MCP servers
+.env
+.mcpregistry_*
+config.yaml
+config_local.yaml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime data
+obsidian/
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local test with hardcoded paths
+test_server_quick.py

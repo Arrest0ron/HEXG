@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hexg-mcp-wrapper"
+version = "0.1.0"
+description = "Wrapper for NOUZ MCP Server"
+dependencies = [
+    "nouz-mcp>=3.2.3",
+]
+
+[tool.setuptools.packages.find]
+include = ["HEXG*"]

@@ -1,0 +1,131 @@
+# =============================================================================
+# NOUZ MCP Server Configuration Template
+# =============================================================================
+# Copy this file to config.yaml to activate custom settings.
+# macOS/Linux: cp config.template.yaml config.yaml
+# Windows PowerShell: Copy-Item config.template.yaml config.yaml
+# By default, without config.yaml, the server runs in "luca" mode (pure graph).
+# Optional isolated SQLite cache for tests:
+#   NOUZ_DATABASE_NAME=obsidian_kb.public.db
+#   NOUZ_DATABASE_PATH=/absolute/path/to/custom.db
+
+# Mode: luca | prizma | sloi
+# - luca: Graph-based, no semantic classification (Default fallback)
+# - prizma: Graph-based with semantic classification and core_mix
+# - sloi: Strict 5-level hierarchy with semantic classification
+mode: prizma
+
+# Meta-root: level 0 anchor node. Created once manually, never touched by server.
+# Excluded from embeddings, sign calculation, core_mix, recalc_signs, recalc_core_mix.
+# Set to the filename (without .md) of your root note, e.g. "φ My Knowledge Base"
+meta_root: ""
+
+# Semantic etalons (optional) — for better semantic classification
+# You can start with just level/type in YAML, etalons are optional
+# Recommended: use distinct domains with low cosine similarity between them.
+# Write descriptive paragraphs, NOT keyword lists. Each etalon should capture
+# the ESSENCE of the domain in 2-3 sentences, using domain-specific jargon
+# and explicit boundary statements ("not X and not Y").
+etalons:
+  - sign: S
+    name: Systems Analysis
+    text: >
+      Methodology for analysing complex objects: feedback loops,
+      emergent properties, self-regulation, bifurcation points.
+      Cybernetics, synergetics, dissipative structures, catastrophe
+      theory, autopoiesis — tools for understanding how the whole
+      exceeds the sum of its parts. Not data and not code — a way
+      of thinking about how parts form a whole and why systems
+      behave non-linearly.
+  - sign: D
+    name: Data & Science
+    text: >
+      Physics and cosmology: from subatomic particles to the large-scale
+      structure of the Universe. Lagrangians, curvature tensors, scattering
+      cross-sections, quarks, bosons, fermions, plasma, vacuum fluctuations,
+      cosmic microwave background, cosmological constant, decoherence.
+      Pure science about the nature of matter, energy and spacetime.
+  - sign: E
+    name: Engineering
+    text: >
+      Software engineering, machine learning and infrastructure: writing
+      and debugging code, deployment, containerisation, neural networks,
+      inference, tokenisation, data serialisation, microservices, CI/CD,
+      automated testing, refactoring, Git, Docker, Kubernetes, APIs.
+      The practical discipline of building computational systems from
+      architecture to production.
+
+levels:
+  core: 1
+  pattern: 2
+  module: 3
+  quant: 4
+  artifact: 5
+
+thresholds:
+  # Minimum spread between max and min cosine scores to attempt classification.
+  # If spread < sign_spread, the note is equidistant from all cores → sign is not assigned.
+  sign_spread: 0.05
+
+  # Confidence threshold for spread-normalized sign classification.
+  # If the dominant core's adjusted percentage >= confident_spread,
+  # sign_source = "auto"; otherwise sign_source = "weak_auto".
+  # Effect on bridges: weak_auto signs do NOT block semantic bridges to the same core —
+  # the domain identity is uncertain, so cross-domain connections are still proposed.
+  confident_spread: 60.0
+
+  # Minimum normalized percentage for a core to appear in the sign.
+  # After spread-normalization: if adjusted_score / total * 100 >= this threshold,
+  # the core is included. Allows compound signs like "SE" when two cores both score ≥ 30%.
+  pattern_second_sign_threshold: 30.0
+
+  # Minimum cosine similarity between two notes to propose a semantic bridge.
+  # Only proposed between notes with different core signs (cross-domain links).
+  semantic_bridge_threshold: 0.55
+
+  # Minimum chunk-pair score required when stored chunk embeddings are available
+  # for both notes in a semantic bridge candidate. This keeps note-level bridges
+  # explainable by concrete text evidence.
+  semantic_bridge_chunk_threshold: 0.55
+
+  # Minimum cosine similarity to auto-link a file to a parent.
+  # Used by process_orphans and add_entity when auto_parents=true.
+  # Raw cosine only — ensures meaningful semantic proximity.
+  # Matching domain is used only as a tiebreaker, not as a score booster.
+  parent_link_threshold: 0.55
+
+# Artifact signs are heuristic labels, not embedding etalons.
+# L5 artifacts get one of these signs by content-structure rules.
+# L4 quants can include artifact_sign as the horizontal part of a composite sign.
+# Public convention: domains use uppercase signs (S/D/E), material types use
+# lowercase signs (n/c/r/l/u/h/s). You may change them, but keep signs short
+# and avoid conflicts with domain signs.
+# Optional `keywords` may be added to any item to override the built-in RU/EN
+# detection words for that material type.
+artifact_signs:
+  - sign: n
+    name: Note
+    text: "Short note, observation, fragment."
+  - sign: c
+    name: Concept
+    text: "Definition, concept, entity description."
+  - sign: r
+    name: Reference
+    text: "External source, documentation, link, citation."
+  - sign: l
+    name: Log
+    text: "Session log, chronology, dialogue record."
+  - sign: u
+    name: Update
+    text: "Update, release note, changelog entry."
+  - sign: h
+    name: Hypothesis
+    text: "Hypothesis, assumption, speculative idea."
+  - sign: s
+    name: Specification
+    text: "Technical specification, instruction, requirements."
+
+# Extra sign characters for parsing entity names (beyond etalon and artifact signs).
+# Used to extract signs from filenames like "S Thermodynamics" or "SE System".
+# This is ONLY for name parsing, NOT for classification.
+sign_chars: ""

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Semiotronika/NOUZ-MCP",
+  "title": "Nouz",
+  "description": "Semantic knowledge engine for Obsidian with auto-classification and DAG hierarchy",
+  "repository": {
+    "url": "https://github.com/Semiotronika/NOUZ-MCP",
+    "source": "github"
+  },
+  "version": "3.2.3",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "nouz-mcp",
+      "version": "3.2.3",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "OBSIDIAN_ROOT",
+          "description": "Path to Obsidian vault",
+          "format": "string",
+          "isRequired": false,
+          "default": "./obsidian"
+        },
+        {
+          "name": "NOUZ_CONFIG",
+          "description": "Absolute path to config.yaml; if omitted, server looks in current working directory",
+          "format": "string",
+          "isRequired": false
+        },
+        {
+          "name": "NOUZ_DATABASE_NAME",
+          "description": "SQLite cache filename inside OBSIDIAN_ROOT",
+          "format": "string",
+          "isRequired": false,
+          "default": "obsidian_kb.db"
+        },
+        {
+          "name": "NOUZ_DATABASE_PATH",
+          "description": "Full SQLite cache path; takes precedence over NOUZ_DATABASE_NAME",
+          "format": "string",
+          "isRequired": false
+        },
+        {
+          "name": "EMBED_ENABLED",
+          "description": "Enable embedding-based features",
+          "format": "string",
+          "isRequired": false,
+          "default": "true"
+        },
+        {
+          "name": "EMBED_PROVIDER",
+          "description": "Embedding provider: openai-compatible endpoint or ollama",
+          "format": "string",
+          "isRequired": false,
+          "default": "openai"
+        },
+        {
+          "name": "EMBED_MODEL",
+          "description": "Embedding model name",
+          "format": "string",
+          "isRequired": false
+        },
+        {
+          "name": "EMBED_API_URL",
+          "description": "Embedding API endpoint",
+          "format": "string",
+          "isRequired": false,
+          "default": "http://127.0.0.1:1234/v1"
+        }
+      ]
+    }
+  ]
+}

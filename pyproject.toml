@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nouz-mcp"
+dynamic = ["version"]
+description = "MCP server for Obsidian — semantic knowledge graph with auto-classification, DAG hierarchy, and cross-domain bridge detection"
+readme = "README_EN.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    {name = "Semiotronika", email = "belkinamariaigorevna@yandex.ru"}
+]
+keywords = ["mcp", "obsidian", "knowledge-graph", "semantic-classification", "rag", "llm", "notes", "pkm", "embeddings", "dag"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Text Processing :: Markup :: Markdown",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "mcp>=1.0.0",
+    "aiofiles>=23.0.0",
+    "pyyaml>=6.0",
+    "aiohttp>=3.9.0",
+    "aiosqlite>=0.19.0",
+]
+
+[project.urls]
+Homepage = "https://semiotronika.ru"
+Repository = "https://github.com/Semiotronika/NOUZ-MCP"
+Documentation = "https://github.com/Semiotronika/NOUZ-MCP#readme"
+"Changelog" = "https://github.com/Semiotronika/NOUZ-MCP/blob/main/CHANGELOG.md"
+"Bug Tracker" = "https://github.com/Semiotronika/NOUZ-MCP/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+]
+
+[project.scripts]
+nouz-mcp = "nouz_mcp.server:main"
+nouz-calc-etalons = "nouz_mcp.calc_etalons:main"
+
+[tool.setuptools]
+packages = ["nouz_mcp"]
+
+[tool.setuptools.dynamic]
+version = {attr = "nouz_mcp._version.__version__"}
